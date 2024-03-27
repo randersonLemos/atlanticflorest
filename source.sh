@@ -1,1 +1,1 @@
-source ~/anaconda3/bin/activate atlanticforest
+source ~/anaconda3/bin/activate atla
