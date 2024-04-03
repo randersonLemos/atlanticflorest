@@ -13,11 +13,14 @@ class Map(Image, Visualization):
         Visualization.__init__(self, palette, minVal, maxVal)
 
 
-     def add_layer(self, geeMap, center=True):
-        empty = True
-        for band in self.getBands():
+     def add_layer(self, geeMap, layerName='', center=True):
+        empty = True                
+        for en, band in enumerate(self.getBands()):
             empty = False
-            Visualization.add_layer(self, band.eeimage, geeMap, center)
+            shown = True if len(self.loadBandNames) == (en+1) else False
+            
+            bandName = band.bandNames()[-1]
+            Visualization.add_layer(self, band.eeimage, bandName, geeMap, shown, center)
 
         if empty:
             print(f"[WARN]No loaded Bands!")
@@ -32,8 +35,8 @@ class Brazil(LULC):
     def __init__(self):
         LULC.__init__(
               self
-            , names.Images.BRAZIL_LULC.value
+            , names.Images.BRAZIL_LULC.value      
+            , mapbiomes['palette']
             , mapbiomes['min']
             , mapbiomes['max']
-            , mapbiomes['palette']
         )

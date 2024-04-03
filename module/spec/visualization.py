@@ -9,15 +9,22 @@ class Visualization:
         self.maxVal = maxVal
 
 
-    def visual(self):
-        return {
-              'palette' : self._palette
-            , 'min' : self._min
-            , 'max' : self._max
+    def vis_params(self):
+        vis = {
+              'palette' : self.palette
+            , 'min' : self.minVal
+            , 'max' : self.maxVal
         }
+        return vis
 
-    def add_layer(self, eeimage, geeMap, center=True):
+
+    def add_layer(self, eeobject, layerName, geeMap, shown=True, center=True):
         if center:
-            geeMap.center_object(eeimage)
+            geeMap.center_object(eeobject)
 
-        geeMap.add_ee_layer(eeimge, self.visual)
+        geeMap.add_ee_layer(
+              ee_object=eeobject
+            , vis_params=self.vis_params()
+            , name=layerName
+            , shown=shown
+            )
