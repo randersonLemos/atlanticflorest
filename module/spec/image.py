@@ -1,6 +1,6 @@
 import ee
 import geemap
-import warnings
+
 
 class Image:
     def __init__(self, eeimage):
@@ -19,6 +19,9 @@ class Image:
 
     def loadBands(self, bandNames=[]):
         if bandNames:
+            if isinstance(bandNames, str):
+                bandNames = [bandNames]
+
             for bandName in bandNames:
                 if bandName not in self.bandNames():
                     raise ValueError(f"Band {bandName} not found in {self.bandNames}")
