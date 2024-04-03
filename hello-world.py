@@ -1,5 +1,9 @@
 import ee
 import geemap
+import warnings
+warnings.simplefilter('always')
+
+
 from module.core import image
 from module.spec import lulc
 from module.spec import canopyheight as cahe
@@ -14,6 +18,8 @@ if __name__ == '__main__':
 
     lulcBrazil = lulc.Brazil()
     caheBrazil = cahe.Brazil()
+
+    m = geemap.Map()
 
     import IPython; IPython.embed()
     #brazil = ee.Image(

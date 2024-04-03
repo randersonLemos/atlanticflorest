@@ -1,5 +1,6 @@
 import ee
 import geemap
+import warnings
 
 class Image:
     def __init__(self, eeimage):
@@ -11,6 +12,41 @@ class Image:
 
         else:
             raise TypeError
+
+
+        self.loadBandNames = []
+
+
+    def loadBands(self, bandNames=[]):
+        if bandNames:
+            for bandName in bandNames:
+                if bandName not in self.bandNames():
+                    raise ValueError(f"Band {bandName} not found in {self.bandNames}")
+
+        else:
+            bandNames = self.bandNames()
+
+
+        for bandName in bandNames:
+            attr = f"b{bandName}"
+            if hasattr(self, attr):
+                continue
+            setattr(self, attr, Image(self.eeimage.select(bandName)))
+            self.loadBandNames.append(bandName)
+
+
+    def getBands(self):
+       if self.loadBandNames:
+           return self._getBands()
+       else: 
+           print(f"[WARN]No loaded Bands!")
+
+    def _getBands(self):
+        for bandName in self.loadBandNames:
+            empty = False
+            attr = f"b{bandName}"
+            yield getattr(self, attr)
+ 
 
 
     def bandNames(self):
