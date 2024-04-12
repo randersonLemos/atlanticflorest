@@ -44,13 +44,13 @@ class Image:
        else: 
            print(f"[WARN]No loaded Bands!")
 
+
     def _getBands(self):
         for bandName in self.loadBandNames:
             empty = False
             attr = f"b{bandName}"
             yield getattr(self, attr)
  
-
 
     def bandNames(self):
         attr = '_bandNames'
