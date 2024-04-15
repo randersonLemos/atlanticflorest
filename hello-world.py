@@ -1,7 +1,6 @@
 import ee
 import geemap
 import warnings
-warnings.simplefilter('always')
 
 
 from module.core import image
