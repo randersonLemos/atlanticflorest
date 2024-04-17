@@ -18,6 +18,9 @@ if __name__ == '__main__':
         pprint.pprint(files)
 
         rasters = []
+
+
+        files = [file for file in files if file[-3:] == 'tif']
         for file in files:       
             raster = rasterio.open(file)
         
@@ -32,6 +35,7 @@ if __name__ == '__main__':
 
         arr, trans = merge(rasters)
         arr = arr.squeeze()
+
         raster = rasterio.open(
               path + '/' +'mosaic.tif'
             , 'w'
@@ -42,6 +46,7 @@ if __name__ == '__main__':
             , dtype=arr.dtype
             , crs='EPSG:4326'
             , transform=trans
+            , compress='LZW'
         )
         raster.write(arr, 1)
         raster.close()
