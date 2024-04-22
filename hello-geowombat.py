@@ -8,34 +8,25 @@ def files_from_folder( folder ):
     return files
 
 
-if __name__ == '__main__':
-    input_folder = '/mnt/d/available/MAPBIOMAS-FIRE-MATAATLANTICA/mapbiomas-brazil-collection-20-mataatlantica-2020'
-    input_files = files_from_folder(input_folder)
+input_folder = '/mnt/d/available/MAPBIOMAS-FIRE-MATAATLANTICA/mapbiomas-brazil-collection-20-mataatlantica-2020'
+input_files = files_from_folder(input_folder)
 
-    #input_files = [
-    #    input_folder + '/' + 'mapbiomas-brazil-collection-20-mataatlantica-2022-0000000000-0000000000.tif'
-    #]
-    
-    
-    #rasters = []
-    #for file in sorted(input_files):
-    #    raster = gw.open(file)
-    #    rasters.append(
-    #        raster
-    #    )
 
+def gwOpenMosaic(mosaic=False):
     gwOpen = gw.open(
           input_files
         , stack_dim='band'
-        , mosaic=True
+        , mosaic=mosaic
     )
-    raster = gwOpen.data
-    print(raster)
+    data = gwOpen.data
+    return data, gwOpen
 
-    #for time_index in raster.time:
-    #    rasterSel = raster.sel(time=time_index)
-    #    print(rasterSel.filename)
-    #    print(rasterSel.shape)
-    #    print('===')
 
-    gwOpen.close()
+
+
+if __name__ == '__main__':
+    raster, gwOpen = gwOpenMosaic(mosaic=False) 
+    rasterMosaic, gwOpenMosaic = gwOpenMosaic(mosaic=True) 
+
+
+    import IPython; IPython.embed()
