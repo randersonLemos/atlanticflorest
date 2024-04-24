@@ -12,9 +12,9 @@ input_folder = '/mnt/d/available/MAPBIOMAS-FIRE-MATAATLANTICA/mapbiomas-brazil-c
 input_files = files_from_folder(input_folder)
 
 
-def gwOpenMosaic(mosaic=False):
+def gwOpenn(files, mosaic=False):
     gwOpen = gw.open(
-          input_files
+          files
         , stack_dim='band'
         , mosaic=mosaic
     )
@@ -25,8 +25,15 @@ def gwOpenMosaic(mosaic=False):
 
 
 if __name__ == '__main__':
-    raster, gwOpen = gwOpenMosaic(mosaic=False) 
-    rasterMosaic, gwOpenMosaic = gwOpenMosaic(mosaic=True) 
+    raster      , gwOpen       = gwOpenn(input_files, mosaic=False) 
+    rasterMosaic, gwOpenMosaic = gwOpenn(input_files, mosaic=True) 
+
+    rasters = []
+    gwOpens = []
+    for input_file in input_files:
+        print(input_file)
+        r, g = gwOpenn(input_file, mosaic=False)
+        rasters.append(r); gwOpens.append(g)
 
 
     import IPython; IPython.embed()
