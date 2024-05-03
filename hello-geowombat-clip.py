@@ -2,6 +2,7 @@ import pathlib
 import geowombat as gw                                                                                                
 import geopandas as gpd
 import matplotlib.pyplot as plt  
+from multiprocessing import Process
 
 
 def files_from_folder( folder ):
@@ -35,37 +36,54 @@ def gwOpenn(files):
         print(src)
     
 
-def gwClip(files, geometry):
+def gwClip(file, geometry, nodata_value):
     with gw.open(
-          files
-        , chuck=1024
+          file
+        , chuck=5*1024
         , bound_by='union'
+        , nodata=nodata_value
     ) as src:
-        print(src)
         
+        # print(src)
+
+        output_file = file.replace('MAPBIOMAS-LULC-MATAATLANTICA', 'MAPABIOMAS-LULC-MATAATLANTICA-CLP').replace('.tif', '.clp.tif')
+       
         cli = src.gw.clip(geometry)
         
-        print(cli)
+        # print(cli)
 
-        cli.gw.to_raster(  '/mnt/d/mapbiomas-lulc/MAPBIOMAS-LULC-MATAATLANTICA/output.tif'
+        cli.gw.to_raster(  output_file
                          , compressor='LZW'
                          , bigtiff='YES'
                          , n_works=4
+                         , nodata=nodata_value
                          )
         
 
 
 def main():
-    raster_file = raster_files[-1]
-    
     shape = gpd.read_file(shape_file)
     shape = shape[ shape['NAME_PT_BR'] == shapeNames['mataatlantica'] ]
-    
+    nodata_value = 0
 
-    gwClip(
-          raster_file
-        , shape.geometry
-    )
+    ps = []
+
+    for raster_file in raster_files:
+        p = Process(
+           target=gwClip
+         , args=(raster_file, shape.geometry, nodata_value)
+        )
+        ps.append((
+            raster_file, p
+        ))
+
+    for name, p in ps:
+        p.start()
+
+
+    for name, p in ps:
+        p.join()
+
               
 
 if __name__ == '__main__':
