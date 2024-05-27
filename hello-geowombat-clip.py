@@ -1,3 +1,4 @@
+import queue
 import pathlib                                                                                                        
 import geowombat as gw                                                                                                
 import geopandas as gpd
@@ -10,8 +11,12 @@ def files_from_folder( folder ):
     return files
 
 
-raster_folder = '/mnt/d/mapbiomas-lulc/MAPBIOMAS-LULC-MATAATLANTICA'
+# raster_folder = '/mnt/d/mapbiomas-lulc/MAPBIOMAS-LULC-MATAATLANTICA'
+raster_folder = '/mnt/d/mapbiomas-fire/MAPBIOMAS-FIRE-MATAATLANTICA'
+# raster_folder = '/mnt/d/mapbiomas-rege/MAPBIOMAS-REGE-MATAATLANTICA'
+
 raster_files = files_from_folder(raster_folder)
+raster_files = ['/mnt/d/mapbiomas-fire/MAPBIOMAS-FIRE-MATAATLANTICA/mapbiomas-brazil-collection-20-mataatlantica-fire-1994.tif']
 
 shape_file = '/mnt/d/mapbiomas-feat/MAPBIOMAS-FEAT-BRAZIL/brazil.shp'
 
@@ -46,7 +51,7 @@ def gwClip(file, geometry, nodata_value):
         
         # print(src)
 
-        output_file = file.replace('MAPBIOMAS-LULC-MATAATLANTICA', 'MAPABIOMAS-LULC-MATAATLANTICA-CLP').replace('.tif', '.clp.tif')
+        output_file = file.replace('MAPBIOMAS-FIRE-MATAATLANTICA', 'MAPBIOMAS-FIRE-MATAATLANTICA-CLP').replace('.tif', '.clp.tif')
        
         cli = src.gw.clip(geometry)
         

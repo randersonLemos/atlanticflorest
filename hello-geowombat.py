@@ -8,32 +8,31 @@ def files_from_folder( folder ):
     return files
 
 
-input_folder = '/mnt/d/available/MAPBIOMAS-FIRE-MATAATLANTICA/mapbiomas-brazil-collection-20-mataatlantica-2020'
+input_folder = '/mnt/d/MOSAIC'
 input_files = files_from_folder(input_folder)
 
 
-def gwOpenn(files, mosaic=False):
-    gwOpen = gw.open(
+def gwOpenn(files):
+    with gw.open(
           files
-        , stack_dim='band'
-        , mosaic=mosaic
-    )
-    data = gwOpen.data
-    return data, gwOpen
-
+        , chuck=1024
+        , bounds_by='union'
+        , mosaic=True
+    ) as src:
+        print(src)
+        nodata_value=0
+        src.gw.to_raster('/mnt/d/MOSAIC/output.tif'
+                    , compressor='LZW'
+                    , bigtiff='YES'
+                    , n_works=4
+                    , nodata=nodata_value
+                    )
+        
 
 
 
 if __name__ == '__main__':
-    raster      , gwOpen       = gwOpenn(input_files, mosaic=False) 
-    rasterMosaic, gwOpenMosaic = gwOpenn(input_files, mosaic=True) 
-
-    rasters = []
-    gwOpens = []
-    for input_file in input_files:
-        print(input_file)
-        r, g = gwOpenn(input_file, mosaic=False)
-        rasters.append(r); gwOpens.append(g)
+    gwOpenn(input_files)
 
 
-    import IPython; IPython.embed()
+    
